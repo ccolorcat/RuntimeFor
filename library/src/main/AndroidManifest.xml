@@ -1,0 +1,9 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cc.colorcat.runtimefor">
+
+    <application>
+        <activity
+            android:name=".RuntimeForCompatActivity"
+            android:theme="@style/RuntimeForCompatTheme" />
+    </application>
+</manifest>
