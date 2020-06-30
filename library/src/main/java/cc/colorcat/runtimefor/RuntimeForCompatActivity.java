@@ -15,35 +15,37 @@ import androidx.core.app.ActivityCompat;
  * GitHub: https://github.com/ccolorcat
  */
 public class RuntimeForCompatActivity extends RuntimeForActivity {
-    private static final String KEY_ACTION = "action";
+    private static final String ACTION = "action";
     private static final String ACTION_RUNTIME_FOR_PERMISSIONS = "action_for_permissions";
     private static final String ACTION_RUNTIME_FOR_RESULT = "action_for_result";
-
-    private static final String KEY_PERMISSIONS = "permissions"; // the value type is String[]
-    private static final String KEY_INTENT = "intent"; // the value type is Intent
-
-    private static final String KEY_REQUEST_CODE = "request_code"; // the value type is int
+    /**
+     * {@link RuntimeForCompatActivity#ACTION_RUNTIME_FOR_PERMISSIONS} the value type is String[]
+     * {@link RuntimeForCompatActivity#ACTION_RUNTIME_FOR_RESULT} the value type is Intent
+     */
+    private static final String DATA = "data";
+    private static final String REQUEST_CODE = "request_code"; // the value type is int
 
     static void startForPermissions(@NonNull Context context, @NonNull String[] permissions, int requestCode) {
-        Intent intent = new Intent(context, RuntimeForCompatActivity.class);
-        intent.putExtra(KEY_REQUEST_CODE, requestCode);
-        intent.putExtra(KEY_ACTION, ACTION_RUNTIME_FOR_PERMISSIONS);
-        intent.putExtra(KEY_PERMISSIONS, permissions);
-        if (!(context instanceof Activity)) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
+        Intent intent = newIntent(context, requestCode);
+        intent.putExtra(ACTION, ACTION_RUNTIME_FOR_PERMISSIONS);
+        intent.putExtra(DATA, permissions);
         context.startActivity(intent);
     }
 
     static void startForResult(@NonNull Context context, @NonNull Intent intent, int requestCode) {
-        Intent i = new Intent(context, RuntimeForCompatActivity.class);
-        i.putExtra(KEY_REQUEST_CODE, requestCode);
-        i.putExtra(KEY_ACTION, ACTION_RUNTIME_FOR_RESULT);
-        i.putExtra(KEY_INTENT, intent);
-        if (!(context instanceof Activity)) {
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
+        Intent i = newIntent(context, requestCode);
+        i.putExtra(ACTION, ACTION_RUNTIME_FOR_RESULT);
+        i.putExtra(DATA, intent);
         context.startActivity(i);
+    }
+
+    private static Intent newIntent(@NonNull Context context, int requestCode) {
+        Intent intent = new Intent(context, RuntimeForCompatActivity.class);
+        intent.putExtra(REQUEST_CODE, requestCode);
+        if (!(context instanceof Activity)) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        return intent;
     }
 
     private String mAction;
@@ -73,14 +75,14 @@ public class RuntimeForCompatActivity extends RuntimeForActivity {
 
     private void parseIntent() {
         Intent intent = getIntent();
-        mRequestCode = intent.getIntExtra(KEY_REQUEST_CODE, -1);
-        mAction = intent.getStringExtra(KEY_ACTION);
+        mRequestCode = intent.getIntExtra(REQUEST_CODE, -1);
+        mAction = intent.getStringExtra(ACTION);
         if (ACTION_RUNTIME_FOR_PERMISSIONS.equals(mAction)) {
-            mPermissions = intent.getStringArrayExtra(KEY_PERMISSIONS);
+            mPermissions = intent.getStringArrayExtra(DATA);
         } else if (ACTION_RUNTIME_FOR_RESULT.equals(mAction)) {
-            mForResultIntent = intent.getParcelableExtra(KEY_INTENT);
+            mForResultIntent = intent.getParcelableExtra(DATA);
         } else {
-            throw new IllegalArgumentException("key " + KEY_ACTION + " has invalid value(" + mAction + ").");
+            throw new IllegalArgumentException("key " + ACTION + " has invalid value(" + mAction + ").");
         }
     }
 
