@@ -1,17 +1,14 @@
-apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-
-// jitPack
-group = 'com.github.ccolorcat'
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
+}
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdk rootProject.ext.compileSdk
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.versionName
+        minSdk rootProject.ext.minSdk
+        targetSdk rootProject.ext.targetSdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -25,44 +22,33 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     implementation rootProject.ext.appcompat
     testImplementation rootProject.ext.testJunit
     androidTestImplementation rootProject.ext.androidTestJunit
     androidTestImplementation rootProject.ext.androidTestEspresso
 }
 
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
-}
-
-task sourcesJar(type: Jar) {
+task androidSourcesJar(type: Jar) {
+    classifier 'sources'
     from android.sourceSets.main.java.srcDirs
-    //noinspection GrDeprecatedAPIUsage
-    classifier = 'sources'
 }
 
-task javadoc(type: Javadoc) {
-    failOnError false
-    source = android.sourceSets.main.java.sourceFiles
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    classpath += configurations.compile
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    //noinspection GrDeprecatedAPIUsage
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
+project.afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                artifact androidSourcesJar
+                groupId = "cc.colorcat.runtimefor"
+                artifactId = "RuntimeFor"
+                version = rootProject.ext.versionName
+            }
+        }
+    }
 }

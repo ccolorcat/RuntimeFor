@@ -1,26 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-
-buildscript {
-    repositories {
-        google()
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.2'
-        // jitPack
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        jcenter()
-
-    }
+plugins {
+    id 'com.android.application' version '7.1.1' apply false
+    id 'com.android.library' version '7.1.1' apply false
 }
 
 task clean(type: Delete) {
@@ -31,13 +12,13 @@ project.ext {
     def sdkVersion = 31
 
     // android
-    compileSdkVersion = sdkVersion
+    compileSdk = sdkVersion
 
     // android.defaultConfig
-    minSdkVersion = 15
-    targetSdkVersion = sdkVersion
-    versionCode = 4
-    versionName = "1.1.0"
+    minSdk = 16
+    targetSdk = sdkVersion
+    versionCode = 5
+    versionName = "1.1.1"
 
     // dependencies
     appcompat = "androidx.appcompat:appcompat:1.4.1"
