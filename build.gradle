@@ -28,7 +28,7 @@ task clean(type: Delete) {
 }
 
 project.ext {
-    def sdkVersion = 29
+    def sdkVersion = 31
 
     // android
     compileSdkVersion = sdkVersion
@@ -36,13 +36,13 @@ project.ext {
     // android.defaultConfig
     minSdkVersion = 15
     targetSdkVersion = sdkVersion
-    versionCode = 3
-    versionName = "1.0.2"
+    versionCode = 4
+    versionName = "1.1.0"
 
     // dependencies
-    appcompat = "androidx.appcompat:appcompat:1.1.0"
-    constraintlayout = "androidx.constraintlayout:constraintlayout:1.1.3"
-    testJunit = "junit:junit:4.12"
-    androidTestJunit = "androidx.test.ext:junit:1.1.1"
-    androidTestEspresso = "androidx.test.espresso:espresso-core:3.2.0"
+    appcompat = "androidx.appcompat:appcompat:1.4.1"
+    constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.3"
+    testJunit = "junit:junit:4.13.2"
+    androidTestJunit = "androidx.test.ext:junit:1.1.3"
+    androidTestEspresso = "androidx.test.espresso:espresso-core:3.4.0"
 }

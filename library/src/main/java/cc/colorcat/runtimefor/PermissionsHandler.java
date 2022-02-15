@@ -10,5 +10,5 @@ import androidx.annotation.NonNull;
 public interface PermissionsHandler {
     void onAllGranted(@NonNull String[] permissions);
 
-    void onDeniedOccur(@NonNull String[] granted, @NonNull String[] denied);
+    default void onDeniedOccur(@NonNull String[] granted, @NonNull String[] denied) { }
 }
